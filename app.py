@@ -36,6 +36,9 @@ Utils.remove_streamlit_marks(st)
 from Pages.home_page import show_home_page
 from Pages.contact_us_page import show_contact_us_page
 
+from Pages.book_an_appointment_page import show_book_an_appointment_page
+from Pages.my_account_page import show_my_account_page
+
 
 
 def make_navbar(st):
@@ -69,9 +72,6 @@ def make_navbar(st):
     )
 
 
-
-
-
 # ================================ Main Functions ================================ #
 
 
@@ -85,5 +85,11 @@ def main():
 
     elif curr_page == "Contact Us":
         show_contact_us_page(st)
+
+    elif curr_page == "Book An Appointment":
+        show_book_an_appointment_page(st)
+
+    elif curr_page == "My Account":
+        show_my_account_page(st)
 
 main()

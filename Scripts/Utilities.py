@@ -23,7 +23,7 @@ def add_space(container):
     """, unsafe_allow_html=True)
 
 
-def add_folium_map(container):
+def __add_folium_map(container):
     from streamlit_folium import folium_static
     import folium
 
@@ -35,6 +35,28 @@ def add_folium_map(container):
         tooltip = "Liberty Bell"
         folium.Marker(
             [39.949610, -75.150282], popup="Liberty Bell", tooltip=tooltip
+        ).add_to(m)
+
+        # call to render Folium map in Streamlit
+        folium_static(m)
+
+
+def add_folium_map(container, location, doc_name, zoom_start=16):
+    from streamlit_folium import folium_static
+    import folium
+
+    with container:
+        # center on Liberty Bell
+        # m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
+        m = folium.Map(location=location, zoom_start=16)
+        
+        # add marker for Liberty Bell
+        # folium.Marker(
+        #     [39.949610, -75.150282], popup="Liberty Bell", tooltip=doc_name
+        # ).add_to(m)
+
+        folium.Marker(
+            location, popup="Liberty Bell", tooltip=doc_name
         ).add_to(m)
 
         # call to render Folium map in Streamlit

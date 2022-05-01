@@ -1,34 +1,41 @@
 {
-    "1" : {
-        "name" : "doc1",
-        "fees" : 100, 
-        "specialization" : "x",
-        "experience" : 10,
-        "rating" : 4.0,
-        "address" : "address1",
-        "phone" : "1234567891",
-        "email" : "doc1@gmail.com"
+    "abc": {
+        "name": "abc",
+        "email": "abc",
+        "fees": 100,
+        "phone": 122,
+        "location": [
+            12.27,
+            13.399
+        ],
+        "specialization": "Cardiology",
+        "experience": 2.11,
+        "password": "abc"
     },
-
-    "2" : {
-        "name" : "doc2",
-        "fees" : 200, 
-        "specialization" : "y",
-        "experience" : 7,
-        "rating" : 3.4,
-        "address" : "address 2",
-        "phone" : "1234567892",
-        "email" : "doc2@gmail.com"
+    "abcde": {
+        "name": "abcde",
+        "email": "abcde",
+        "fees": 100,
+        "phone": 129023,
+        "location": [
+            12.2,
+            12.2
+        ],
+        "specialization": "Orthopedics",
+        "experience": 1.1,
+        "password": "abcde"
     },
-
-    "3" : {
-        "name" : "doc1",
-        "fees" : 100, 
-        "specialization" : "x",
-        "experience" : 4,
-        "rating" : 3.2,
-        "address" : "address 3",
-        "phone" : "1234567893",
-        "email" : "doc3@gmail.com"
+    "abcdef": {
+        "name": "abcdef",
+        "email": "abcdef",
+        "fees": 100,
+        "phone": 123,
+        "location": [
+            12.0,
+            12.0
+        ],
+        "specialization": "Cardiology",
+        "experience": 2.1,
+        "password": "abcdef"
     }
 }

@@ -42,15 +42,27 @@ def get_docs_sorted_by(criteria):
         reverse = criteria != "fees"
     )
 
-def get_docs_availiable_at(date_and_time, check_free = True):     
-    reload_appointment_data() 
+def filter_docs(criteria, value):
+    # TODO:  assert(is_valid(criteria, value)) 
+    ## reload_doctors_data() 
 
-    for doc_id in appointment_data.keys():
+    return filter(
+        lambda doc_id: doctors_data[doc_id][criteria] == value, 
+        doctors_data.keys() 
+    )
+    
+
+def get_docs_availiable_at(date_and_time, criteria = None, value = None, check_free = True):
+    reload_appointment_data()
+    reload_doctors_data() 
+    keys = appointment_data.keys() if criteria is None else filter_docs(criteria, value) 
+
+    for doc_id in keys:
         if is_availiable(doc_id, date_and_time):
             if check_free and not has_appointment(doc_id, date_and_time):
                 continue 
 
-            yield doc_id 
+            yield doctors_data[doc_id]
 
 
 def is_availiable(doc_id, date_and_time):
@@ -96,6 +108,8 @@ def is_future_date(date_and_time):
     return datetime.now() <= date_and_time 
 
 
+def cancel_booking(date_and_time, doc_id, patient_id):
+    data_saver.canc
 
 
 if __name__ == '__main__':

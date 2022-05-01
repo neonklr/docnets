@@ -1,9 +1,8 @@
 import json 
 import datetime 
 
-files_loc = 'Data/'
-APPOINTMENT_FILE_PATH = files_loc + 'appointments.json' 
-## DOCTORS_FILE_PATH = files_loc + 'doctors.json' 
+from Scripts.constants import * 
+
 
 class TimePreProcessor:
     def preprocess_times(self, appointments: dict):
@@ -85,6 +84,11 @@ def get_appointment_data(preprocess_time = True, preprocess_schedule = True):
     return data 
 
 
+def get_doctors_data():
+    with open(DOCTORS_FILE_PATH, 'r') as file:
+        data = json.load(file) 
+    
+    return data 
 
 if __name__ == '__main__':
     data = get_appointment_data() 
