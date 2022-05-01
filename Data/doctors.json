@@ -1,0 +1,34 @@
+{
+    "1" : {
+        "name" : "doc1",
+        "fees" : 100, 
+        "specialization" : "x",
+        "experience" : 10,
+        "rating" : 4.0,
+        "address" : "address1",
+        "phone" : "1234567891",
+        "email" : "doc1@gmail.com"
+    },
+
+    "2" : {
+        "name" : "doc2",
+        "fees" : 200, 
+        "specialization" : "y",
+        "experience" : 7,
+        "rating" : 3.4,
+        "address" : "address 2",
+        "phone" : "1234567892",
+        "email" : "doc2@gmail.com"
+    },
+
+    "3" : {
+        "name" : "doc1",
+        "fees" : 100, 
+        "specialization" : "x",
+        "experience" : 4,
+        "rating" : 3.2,
+        "address" : "address 3",
+        "phone" : "1234567893",
+        "email" : "doc3@gmail.com"
+    }
+}

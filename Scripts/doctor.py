@@ -1,32 +1,60 @@
-import datetime
-from Scripts.database_handler import load_database
+import Scripts.data_loader as data_loader
+import Scripts.data_saver as data_saver 
 
 
-def preprocess_time_intervals(time_intervals):
-    for interval in time_intervals:
-        start, end = interval.split('-') 
-        yield (datetime.time(start), datetime.time(end)) 
+appointment_data = None 
 
-doctors = None 
-def update_doctors():
-    global doctors 
+def update_data():
+    global appointment_data 
+    appointment_data = data_loader.get_appointment_data() 
+
+def get_docs_availiable_at(date_and_time, check_free = True):     
+    for doc_id in appointment_data.keys():
+        if is_availiable(doc_id, date_and_time):
+            if check_free and not has_appointment(doc_id, date_and_time):
+                continue 
+
+            yield doc_id 
+
+
+def is_availiable(doc_id, date_and_time):
+    # returns whether this doc works at this time  ?
+    doctor = appointment_data[doc_id]
+
+    checkup_time = doctor["time_per_patient"] 
+
+    for start, end in doctor["time_slots"]:
+        if start <= date_and_time.time() and (date_and_time + checkup_time).time() <= end:
+            return True 
     
-    doctors = load_database()
+    return False 
+
+def has_appointment(doc_id, date_and_time):
+    assert(is_availiable(doc_id, date_and_time))
+
+    schedule = appointment_data[doc_id]['schedule'] 
+
+    if date_and_time.date() not in schedule:  # no appointments on whole day
+        return True 
     
-
-def get_docs_availiable_at(time, check_free = True): 
-    update_doctors()
-
-    for doctor in doctors:
-        if is_availiable_at(doctor, time, check_free):
-            yield doctor
+    return date_and_time.time() not in schedule[date_and_time.date()] 
 
 
-def is_availiable_at(doctor, time, check_free = True):
-    time_intervals = doctors[doctor]["timeSlots"]
-    timePerPatient = doctors[doctor]["timePerPatient"]
-    occupiedTill = doctors[doctor]["occupied"]
-    
-    for start, end in time_intervals:
-        if (start <= time <= end) and (check_free or (end - time) >= timePerPatient):
-            return True
+def book(date_and_time, doc_id, patient_id):
+    doc_id = str(doc_id)
+
+    check_if_booking_is_valid()     
+    data_saver.add_booking(date_and_time, doc_id, patient_id) 
+
+def check_if_booking_is_valid(doc_id, date_and_time):
+    update_data() 
+    assert(has_appointment(doc_id, date_and_time))
+
+
+if __name__ == '__main__':
+    import datetime 
+    date_and_time = datetime.datetime(2022, 5, 1, 15)  
+
+    # print('Availiable Docs:', *get_docs_availiable_at(date_and_time)) 
+    book(date_and_time, 1, 1011)
+
