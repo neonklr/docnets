@@ -11,6 +11,7 @@ Author : Hospitalized Trio
 # Dependencies
 
 import streamlit as st
+import Scripts.Utilities as Utils
 
 # ================================ SETTING STREAMLIT PAGE CONFIGURATIONS ================================ #
 
@@ -27,47 +28,62 @@ st.set_page_config(
 )
 
 
-# ================================ Main Functions ================================ #
-def remove_streamlit_marks(st):
-    st.markdown(
-        '''
-            <style>
-                footer { visibility: hidden; }
-                /* #MainMenu { visibility: hidden; } */
-                /* [data-testid=stHeader] { backdrop-filter: blur(1px); background: none; } */
-            </style>
-        '''
-    , unsafe_allow_html=True)
+Utils.remove_streamlit_marks(st)
+
+
+# ================================ Importing Intra-Scripts ================================ #
+
+from Pages.home_page import show_home_page
+from Pages.contact_us_page import show_contact_us_page
 
 
 
-def doctor_details(st):
+def make_navbar(st):
+    import hydralit_components as hc
     import datetime
-    import json
 
-    st.header("Enter time slot you are free in")
-    st.subheader("from :")
-    t = st.time_input('Set an alarm for', datetime.time(8, 45))
-    st.write('Alarm is set for')
+    # specify the primary menu definition
+    menu_data = [
+        {'icon': "far fa-handshake", 'label':"Book An Appointment"}, #'ttip':"I'm the Dashboard tooltip!"}, #can add a tooltip message
+        {'icon': "bi bi-calendar3", 'label':"Ongoing Schedules"},
+        {'icon': "bi bi-geo-alt", 'label':"City Map"},
+        {'icon':"bi bi-megaphone",'label':"Announcements"},
+        {'icon': "bi bi-chat-left-text", 'label':"Forum"},
+        {'icon': "bi bi-telephone", 'label':"Contact Us"},
+        # {'icon': "fa-solid fa-radar",'label':"Dropdown1", 'submenu':[{'id':' subid11','icon': "fa fa-paperclip", 'label':"Sub-item 1"},{'id':'subid12','icon': "💀", 'label':"Sub-item 2"},{'id':'subid13','icon': "fa fa-database", 'label':"Sub-item 3"}]},
+    ]
 
-    print(json.load(open('data.json', 'r', encoding='utf-8')))
+    over_theme = {'txc_inactive': '#FFFFFF', 'menu_background':'#00B9FF', 'txc_active':'grey'}
+    # over_theme = {'txc_inactive': 'white','menu_background':'inherit','txc_active':'yellow','option_active':'orange'}
+    # font_fmt = {'font-class':'h2','font-size':'150%'}
+    
+    hc.nav_bar(
+        menu_definition=menu_data,
+        override_theme=over_theme,
+        home_name='Home',
+        login_name='My Account',
+        hide_streamlit_markers=False, #will show the st hamburger as well as the navbar now!
+        sticky_nav=True, #at the top or not
+        sticky_mode='pinned', #jumpy or not-jumpy, but sticky or pinned
+        key="current_page"
+    )
+
+
+
+
+
+# ================================ Main Functions ================================ #
 
 
 def main():
-    from temp import mycomponent
+    make_navbar(st)
 
-    # mycomponent()
-    # remove_streamlit_marks(st)
+    curr_page = st.session_state.get("current_page", None)
 
-    columns = st.columns(2)
+    if curr_page == None or curr_page == "Home":
+        show_home_page(st)
 
-    columns[0].image('https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80')
-    columns[1].markdown("""
-    <h4>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)</h4>
-    """, unsafe_allow_html=True)
-
-    st.selectbox("Select your choice", ["I am a doctor", "I am a patient"])
-
-    doctor_details(st)
+    elif curr_page == "Contact Us":
+        show_contact_us_page(st)
 
 main()
