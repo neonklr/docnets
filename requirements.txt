@@ -9,3 +9,4 @@ geopy==2.2.0
 requests
 folium==0.12.1.post1
 streamlit-folium==0.6.7
+hydralit-components==1.0.9
