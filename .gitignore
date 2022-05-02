@@ -3,3 +3,4 @@ temp/*
 temp.py
 Pages/__pycache__/*
 Scripts/__pycache__/*
+__requirements.txt

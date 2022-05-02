@@ -4,14 +4,15 @@ import Scripts.constants as constants
 from Scripts.cookie_manager import set_user_cookies
 import Scripts.Utilities as Utils
 
+import geopy
+from geopy.geocoders import Nominatim
+from geopy.extra.rate_limiter import RateLimiter
+
 
 def get_location_input(container):
     # from shapely.geometry import Point, Polygon
     # import geopandas as gpd
     # import pandas as pd
-    import geopy
-    from geopy.geocoders import Nominatim
-    from geopy.extra.rate_limiter import RateLimiter
 
     # street = container.text_input("Street")
     city = container.text_input("City", "Sonipat")
