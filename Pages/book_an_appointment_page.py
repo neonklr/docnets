@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 
 from Scripts.doctor import get_docs_availiable_at, book
 
+from Scripts.data_loader import get_users_data
+
 
 def show_doc_table(st, data):
     import pandas as pd
@@ -75,8 +77,21 @@ def show_booking_form(st):
 
     if selected_doc != None:
         # TODO :- https://towardsdatascience.com/visualization-in-python-finding-routes-between-points-2d97d4881996
+        
         # TODO :- Remove this eval
-        Utils.add_folium_map(None, [eval(selected_doc["location"])], [selected_doc["name"]])
+        # Utils.add_folium_map(
+        #     None, 
+        #     [eval(selected_doc["location"])], [selected_doc["name"]],
+        # )
+
+        Utils.add_folium_map_route(
+            None,
+            location_1 = eval(selected_doc["location"]),
+            doc_1 = selected_doc["name"],
+            location_2 = get_users_data()[constants.CURR_USER]["location"],
+            doc_2 = constants.CURR_USER,
+            label=None
+        )
 
         # selected_doc_id = None
         selected_doc['location'] = eval(selected_doc['location'])
@@ -86,14 +101,17 @@ def show_booking_form(st):
                 selected_doc_id = k
                 break
 
+        placeholder = st.empty()
 
-        if st.button("Book My Appointment"): # TODO :- Center button on webpage
+        if Utils.center_button(st, "Book My Appointment"): # TODO :- Center button on webpage
             try:
                 book(
                     date_and_time=date_and_time,
                     doc_id=selected_doc_id,
                     patient_id=constants.CURR_USER
                 )
+                placeholder.success("Your booking has been made")
+                st.balloons()
             except Exception as e:
                 raise e
 
@@ -120,6 +138,9 @@ def show_book_an_appointment_page(st):
 
     Utils.add_space(st)
 
-    constants.CURR_USER = "abc" # TODO : remove this
-
-    show_booking_form(st)
+    if constants.CURR_USER_IS_DOC:
+        st.warning("The Booking Feature is only present for users and not doctors.")
+    elif constants.CURR_USER == None:
+        st.warning("Please login to continue with this feature")
+    else:
+        show_booking_form(st)

@@ -9,10 +9,13 @@ def get_manager():
 
 
 def get_user_cookies():
-    COOKIE = constants.COOKIES[constants.COOKIE_ID]
+    COOKIES = constants.COOKIE_MANAGER.get_all()
+    COOKIE = COOKIES.get(constants.COOKIE_ID)
 
     if COOKIE != None:
-        return [x.strip() for x in COOKIE.split(";")]
+        COOKIE = [x.strip() for x in COOKIE.split(";")]
+        constants.CURR_USER = COOKIE[0]
+        constants.CURR_USER_IS_DOC = eval(COOKIE[1])
 
 
 def set_user_cookies(VALUE):
@@ -22,9 +25,9 @@ def set_user_cookies(VALUE):
     # set the cookie
     constants.COOKIE_MANAGER.set(
         cookie = constants.COOKIE_ID,
-        val = ''.join([VALUE[0], ";", VALUE[1]]),
+        val = ''.join([VALUE[0], ";", str(VALUE[1])]),
         expires_at = EXPIRES_AT
     )
 
-    constants.CURR_USER = VALUE
-    constants.CURR_USER_IS_DOC = bool(VALUE[1])
+    constants.CURR_USER = VALUE[0]
+    constants.CURR_USER_IS_DOC = VALUE[1]

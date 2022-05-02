@@ -32,13 +32,18 @@ st.set_page_config(
 
 Utils.remove_streamlit_marks(st)
 
-# constants.COOKIE_MANAGER = CMFunctions.get_manager()
+constants.COOKIE_MANAGER = CMFunctions.get_manager()
 
-# if constants.CURR_USER == None:
-#     constants.COOKIE_MANAGER.get_all()
-#     constants.CURR_USER = constants.COOKIE_MANAGER.get(constants.COOKIE_ID, None)
-#     constants.CURR_USER_IS_DOC = bool(constants.CURR_USER[1], None)
+if constants.CURR_USER == None:
+    CMFunctions.get_user_cookies()
 
+
+# Additional Overwriting of "My Account" Tag
+
+if constants.CURR_USER == None:
+    login_name = "Login/Signup"
+else:
+    login_name = "My Account"
 
 # ================================ Importing Intra-Scripts ================================ #
 
@@ -52,9 +57,11 @@ from Pages.contact_us_page import show_contact_us_page
 from Pages.my_account_page import show_my_account_page
 
 
+import hydralit_components as hc
+
 
 def make_navbar():
-    import hydralit_components as hc
+    global login_name
 
     # specify the primary menu definition
     menu_data = [
@@ -75,7 +82,7 @@ def make_navbar():
         menu_definition=menu_data,
         override_theme=over_theme,
         home_name='Home',
-        login_name='My Account',
+        login_name=login_name,
         hide_streamlit_markers=False, #will show the st hamburger as well as the navbar now!
         sticky_nav=True, #at the top or not
         sticky_mode='pinned', #jumpy or not-jumpy, but sticky or pinned
@@ -88,6 +95,8 @@ def make_navbar():
 
 
 def main():
+    global login_name
+
     make_navbar()
 
     curr_page = st.session_state.get("current_page", None)
@@ -113,7 +122,7 @@ def main():
     elif curr_page == "FAQs":
         show_faqs_page(st)
 
-    elif curr_page == "My Account":
+    elif curr_page == login_name:
         show_my_account_page(st)
 
 main()

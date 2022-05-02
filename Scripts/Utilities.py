@@ -1,5 +1,3 @@
-
-
 def remove_streamlit_marks(st):
     st.markdown(
         '''
@@ -32,6 +30,50 @@ def get_column_mean(data, column_index):
         sum += row[column_index]
 
     return sum/len(data)
+
+
+def add_folium_map_route(container, location_1, location_2, doc_1, doc_2, label, width=1200, zoom_start=8):
+    
+    if container == None:
+        __add_folium_map_route(location_1, location_2, doc_1, doc_2, label, width, zoom_start)
+    else:
+        with container:
+            __add_folium_map_route(location_1, location_2, doc_1, doc_2, label, width, zoom_start)
+
+
+def __add_folium_map_route(location_1, location_2, doc_1, doc_2, label, width, zoom_start):
+
+    from streamlit_folium import folium_static
+    import folium
+
+    # center on doctors location
+    lon = get_column_mean([location_1, location_2], column_index=0)
+    lat = get_column_mean([location_1, location_2], column_index=1)
+
+    m = folium.Map(location=[lon, lat], zoom_start=zoom_start)
+    
+    folium.Marker(
+        location_1,
+        popup=doc_1,
+        tooltip=doc_1,
+    ).add_to(m)
+
+    folium.Marker(
+        location_2,
+        popup=doc_2,
+        tooltip=doc_2,
+    ).add_to(m)
+
+    f1=folium.FeatureGroup("Your Route")
+
+    # Adding lines to the different feature groups
+    line_1=folium.vector_layers.PolyLine((location_1, location_2),popup='<b>Your Route</b>',tooltip='Your Route',color='red',weight=10).add_to(f1)
+
+    f1.add_to(m)
+
+    # call to render Folium map in Streamlit
+    folium_static(m, width=width)
+
 
 
 def add_folium_map(container, locations, doc_names, width=1200, zoom_start=8):
@@ -84,9 +126,18 @@ def show_lottie_animation(container, url):
     from streamlit_lottie import st_lottie
     
     with container:
-        st_lottie(load_lottie_url(url))
+        try:
+            st_lottie(load_lottie_url(url))
+        except Exception:
+            pass
 
 
 
 def image_url(image_url_id):
         return f"https://drive.google.com/uc?export=view&id={image_url_id}"
+
+
+def center_button(st, text):
+    st.text("")
+    columns = st.columns([3, 1, 3])
+    return columns[1].button(text)

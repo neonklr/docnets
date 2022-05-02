@@ -1,6 +1,10 @@
 {
-    "abc": {
-        "name": "abc",
-        "password": "abc"
+    "xyz": {
+        "name": "xyz",
+        "location": [
+            28.9953758,
+            77.0233627
+        ],
+        "password": "xyz"
     }
 }

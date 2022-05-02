@@ -1,32 +1,13 @@
 {
     "abc": {
-        "time_per_patient": "00:30",
+        "time_per_patient": "0:30",
         "time_slots": [
-            "00:00-23:59"
+            "01:00:00-18:00:00"
         ],
         "schedule": {
-            "2022-05-02": {
-                "17:00:00": "abc",
-                "17:15:00": "abc",
-                "18:05:00": "abc"
-            },
             "2022-05-03": {
-                "17:45:00": "abc"
+                "12:00:00": "xyz"
             }
         }
-    },
-    "abcde": {
-        "time_per_patient": "00:30",
-        "time_slots": [
-            "00:00-23:59"
-        ],
-        "schedule": {}
-    },
-    "abcdef": {
-        "time_per_patient": "00:30",
-        "time_slots": [
-            "00:00-23:59"
-        ],
-        "schedule": {}
     }
 }

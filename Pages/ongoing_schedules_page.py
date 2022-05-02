@@ -6,7 +6,7 @@ from Scripts.data_loader import get_appointment_data, get_doctors_data, get_user
 
 
 def add_info(container, title, content, label, is_doctor):
-    # element of annoted_text : simple_text or (main_text, annotation_text, background, color)
+    # TODO :- Dark Theme Not Working
     # for colour palette reference :- https://material.io/archive/guidelines/style/color.html#color-color-palette
 
     if is_doctor:

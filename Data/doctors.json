@@ -5,37 +5,11 @@
         "fees": 100,
         "phone": 122,
         "location": [
-            12.27,
-            13.399
+            30.9953758,
+            79.0233627
         ],
         "specialization": "Cardiology",
-        "experience": 2.11,
+        "experience": 0.0011,
         "password": "abc"
-    },
-    "abcde": {
-        "name": "abcde",
-        "email": "abcde",
-        "fees": 100,
-        "phone": 129023,
-        "location": [
-            12.2,
-            12.2
-        ],
-        "specialization": "Orthopedics",
-        "experience": 1.1,
-        "password": "abcde"
-    },
-    "abcdef": {
-        "name": "abcdef",
-        "email": "abcdef",
-        "fees": 100,
-        "phone": 123,
-        "location": [
-            12.0,
-            12.0
-        ],
-        "specialization": "Cardiology",
-        "experience": 2.1,
-        "password": "abcdef"
     }
 }

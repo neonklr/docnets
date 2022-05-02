@@ -1,5 +1,5 @@
-import json 
-
+import json
+import Scripts.cookie_manager as CMFunctions
 import Scripts.constants as constants
 
 def login(username, password, is_doctor):
@@ -19,6 +19,6 @@ def login(username, password, is_doctor):
     if data[username]['password'] != password:
         raise Exception("Wrong password")
 
-
-    constants.CURR_USER = username
-    constants.CURR_USER_IS_DOC = is_doctor
+    CMFunctions.set_user_cookies(
+        [username, is_doctor]
+    )
