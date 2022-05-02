@@ -18,7 +18,7 @@ import Scripts.cookie_manager as CMFunctions
 # ================================ SETTING STREAMLIT PAGE CONFIGURATIONS ================================ #
 
 st.set_page_config(
-    page_title="appointment manager",
+    page_title="Docnets",
     layout="wide",
     page_icon=None, # DEPRECATED : constants.PAGE_ICON,
     initial_sidebar_state="collapsed",
