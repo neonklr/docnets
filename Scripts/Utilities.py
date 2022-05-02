@@ -23,44 +23,50 @@ def add_space(container):
     """, unsafe_allow_html=True)
 
 
-def __add_folium_map(container):
+def get_column_mean(data, column_index):
+    if len(data) == 0:
+        return 0
+
+    sum = 0
+    for row in data:
+        sum += row[column_index]
+
+    return sum/len(data)
+
+
+def add_folium_map(container, locations, doc_names, width=1200, zoom_start=8):
+    
+    if container == None:
+        __add_folium_map(locations, doc_names, width, zoom_start)
+    else:
+        with container:
+            __add_folium_map(locations, doc_names, width, zoom_start)
+
+
+
+
+def __add_folium_map(locations, doc_names, width, zoom_start):
+
     from streamlit_folium import folium_static
     import folium
 
-    with container:
-        # center on Liberty Bell
-        m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
+    # center on doctors location
+    lon = get_column_mean(locations, column_index=0)
+    lat = get_column_mean(locations, column_index=1)
 
-        # add marker for Liberty Bell
-        tooltip = "Liberty Bell"
+    m = folium.Map(location=[lon, lat], zoom_start=zoom_start)
+    
+    # add marker for a doctor
+    for location, doc_name in zip(locations, doc_names):
         folium.Marker(
-            [39.949610, -75.150282], popup="Liberty Bell", tooltip=tooltip
+            location,
+            popup=doc_name,
+            tooltip=doc_name,
+            #icon=folium.Icon(color='blue', icon='circle-h', prefix='fa')
         ).add_to(m)
 
-        # call to render Folium map in Streamlit
-        folium_static(m)
-
-
-def add_folium_map(container, location, doc_name, zoom_start=16):
-    from streamlit_folium import folium_static
-    import folium
-
-    with container:
-        # center on Liberty Bell
-        # m = folium.Map(location=[39.949610, -75.150282], zoom_start=16)
-        m = folium.Map(location=location, zoom_start=16)
-        
-        # add marker for Liberty Bell
-        # folium.Marker(
-        #     [39.949610, -75.150282], popup="Liberty Bell", tooltip=doc_name
-        # ).add_to(m)
-
-        folium.Marker(
-            location, popup="Liberty Bell", tooltip=doc_name
-        ).add_to(m)
-
-        # call to render Folium map in Streamlit
-        folium_static(m)
+    # call to render Folium map in Streamlit
+    folium_static(m, width=width)
 
 
 def load_lottie_url(url):

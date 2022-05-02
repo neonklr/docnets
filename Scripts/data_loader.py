@@ -90,6 +90,12 @@ def get_doctors_data():
     
     return data 
 
+def get_users_data():
+    with open(USERS_FILE_PATH, 'r') as file:
+        data = json.load(file) 
+    
+    return data 
+
 if __name__ == '__main__':
     data = get_appointment_data() 
 

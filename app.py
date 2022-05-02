@@ -12,11 +12,13 @@ Author : Hospitalized Trio
 
 import streamlit as st
 import Scripts.Utilities as Utils
+import Scripts.constants as constants
+import Scripts.cookie_manager as CMFunctions
 
 # ================================ SETTING STREAMLIT PAGE CONFIGURATIONS ================================ #
 
 st.set_page_config(
-    page_title="appoitment manager",
+    page_title="appointment manager",
     layout="wide",
     page_icon=None, # DEPRECATED : constants.PAGE_ICON,
     initial_sidebar_state="collapsed",
@@ -30,20 +32,29 @@ st.set_page_config(
 
 Utils.remove_streamlit_marks(st)
 
+# constants.COOKIE_MANAGER = CMFunctions.get_manager()
+
+# if constants.CURR_USER == None:
+#     constants.COOKIE_MANAGER.get_all()
+#     constants.CURR_USER = constants.COOKIE_MANAGER.get(constants.COOKIE_ID, None)
+#     constants.CURR_USER_IS_DOC = bool(constants.CURR_USER[1], None)
+
 
 # ================================ Importing Intra-Scripts ================================ #
 
 from Pages.home_page import show_home_page
-from Pages.contact_us_page import show_contact_us_page
-
 from Pages.book_an_appointment_page import show_book_an_appointment_page
+from Pages.ongoing_schedules_page import show_ongoing_schedules_page
+from Pages.city_map_page import show_city_map_page
+from Pages.announcements_page import show_announcements_page
+from Pages.faqs_page import show_faqs_page
+from Pages.contact_us_page import show_contact_us_page
 from Pages.my_account_page import show_my_account_page
 
 
 
-def make_navbar(st):
+def make_navbar():
     import hydralit_components as hc
-    import datetime
 
     # specify the primary menu definition
     menu_data = [
@@ -51,7 +62,7 @@ def make_navbar(st):
         {'icon': "bi bi-calendar3", 'label':"Ongoing Schedules"},
         {'icon': "bi bi-geo-alt", 'label':"City Map"},
         {'icon':"bi bi-megaphone",'label':"Announcements"},
-        {'icon': "bi bi-chat-left-text", 'label':"Forum"},
+        {'icon': "bi bi-chat-left-text", 'label':"FAQs"},
         {'icon': "bi bi-telephone", 'label':"Contact Us"},
         # {'icon': "fa-solid fa-radar",'label':"Dropdown1", 'submenu':[{'id':' subid11','icon': "fa fa-paperclip", 'label':"Sub-item 1"},{'id':'subid12','icon': "💀", 'label':"Sub-item 2"},{'id':'subid13','icon': "fa fa-database", 'label':"Sub-item 3"}]},
     ]
@@ -71,12 +82,13 @@ def make_navbar(st):
         key="current_page"
     )
 
+    # TODO :- shift sidebar at top
 
 # ================================ Main Functions ================================ #
 
 
 def main():
-    make_navbar(st)
+    make_navbar()
 
     curr_page = st.session_state.get("current_page", None)
 
@@ -88,6 +100,18 @@ def main():
 
     elif curr_page == "Book An Appointment":
         show_book_an_appointment_page(st)
+
+    elif curr_page == "Ongoing Schedules":
+        show_ongoing_schedules_page(st)
+
+    elif curr_page == "City Map":
+        show_city_map_page(st)
+
+    elif curr_page == "Announcements":
+        show_announcements_page(st)
+
+    elif curr_page == "FAQs":
+        show_faqs_page(st)
 
     elif curr_page == "My Account":
         show_my_account_page(st)

@@ -1,18 +1,17 @@
 # from Scripts.constants import *
 import Scripts.constants as constants
 import Scripts.Utilities as Utils
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from Scripts.doctor import get_docs_availiable_at
+from Scripts.doctor import get_docs_availiable_at, book
 
 
-def make_table(st, data):
-    import pandas as pd 
-    import numpy as np
+def show_doc_table(st, data):
+    import pandas as pd
     from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
     data= pd.DataFrame(data)
-    
+
     gb = GridOptionsBuilder.from_dataframe(data)
     gb.configure_pagination(paginationAutoPageSize=True) #Add pagination
     gb.configure_side_bar() #Add a sidebar
@@ -24,20 +23,18 @@ def make_table(st, data):
         gridOptions=gridOptions,
         data_return_mode='AS_INPUT', 
         update_mode='MODEL_CHANGED', 
-        fit_columns_on_grid_load=False,
-        theme='blue', #Add theme color to the table
+        fit_columns_on_grid_load=True,
+        theme='streamlit', #Add theme color to the table
         enable_enterprise_modules=True,
         height=350, 
         width='100%',
         reload_data=True
     )
 
-    data = grid_response['data']
-    selected = grid_response['selected_rows'] 
-    df = pd.DataFrame(selected) #Pass the selected rows to a new dataframe d 
-
-    return dict(df.iloc[0])
-
+    # data = grid_response['data']
+    selected_doc = grid_response['selected_rows']
+    
+    return selected_doc[0] if selected_doc else None
 
 
 def show_booking_form(st):
@@ -45,24 +42,60 @@ def show_booking_form(st):
         st.warning("Please login to continue")
         return None
 
-    appointment_date = st.date_input("Select A Date of Appointment", value=datetime.now())
-    appointment_time = st.time_input("Select A Time of Appointment")
+    date_and_time = convert_to_datetime(
+        st.date_input("Select A Date of Appointment", value=datetime.now()),
+        st.time_input("Select A Time of Appointment", value=datetime.now() + timedelta(minutes=2))
+    )
 
     specialization = st.selectbox("Select a specialization", ["Cardiology", "Neurology", "Orthopedics", "Gynaecology", "Dermatology"])
 
+    info_box = st.empty()
+
+    if not is_future_date(date_and_time):
+        info_box.warning("You have entered an Invalid Date or Time")
+        return None
+
+    
     selected_docs = get_docs_availiable_at(
-        date_and_time = convert_to_datetime(appointment_date, appointment_time),
+        date_and_time = date_and_time,
         criteria="specialization",
         value=specialization
     )
 
-    selected_docs = list(selected_docs)
+    doctors = {k: v for k, v in selected_docs}
 
-    for doc in selected_docs:
+    for doc in doctors.values():
         del doc["password"]
 
-    selected_doc = make_table(st, selected_docs)
-    Utils.add_folium_map(st.columns(2)[0], eval(selected_doc["location"]), selected_doc["name"])
+    if doctors:
+        selected_doc = show_doc_table(st, doctors.values())
+    else:
+        info_box.warning("No doctor available at the moment")
+        return None
+
+    if selected_doc != None:
+        # TODO :- https://towardsdatascience.com/visualization-in-python-finding-routes-between-points-2d97d4881996
+        # TODO :- Remove this eval
+        Utils.add_folium_map(None, [eval(selected_doc["location"])], [selected_doc["name"]])
+
+        # selected_doc_id = None
+        selected_doc['location'] = eval(selected_doc['location'])
+
+        for k, v in doctors.items():
+            if v == selected_doc:
+                selected_doc_id = k
+                break
+
+
+        if st.button("Book My Appointment"): # TODO :- Center button on webpage
+            try:
+                book(
+                    date_and_time=date_and_time,
+                    doc_id=selected_doc_id,
+                    patient_id=constants.CURR_USER
+                )
+            except Exception as e:
+                raise e
 
 
 
@@ -71,12 +104,15 @@ def convert_to_datetime(date, time):
         date.year, date.month, date.day, time.hour, time.minute, time.second
     )
 
+def is_future_date(date_and_time):    
+    return datetime.now() <= date_and_time 
+
 
 def show_book_an_appointment_page(st):
     Utils.website_heading(
         st,
         content="Book an appointment",
-        symbol=".",
+        symbol="🤝",
         font_size=60,
         color="goldenrod",
         text_align="center"
@@ -84,6 +120,6 @@ def show_book_an_appointment_page(st):
 
     Utils.add_space(st)
 
-    constants.CURR_USER = "xyz" # TODO : remove this
+    constants.CURR_USER = "abc" # TODO : remove this
 
     show_booking_form(st)
