@@ -1,7 +1,6 @@
 from annotated_text import annotated_text
 import Scripts.Utilities as Utils
 
-
 def __show_single_announcement(st, announcement):
     st.markdown(f"""
     <div style="background-color: rgba(250, 202, 43, 0.2); color: "rgb(148, 124, 45)"; padding: 10px; border-radius: 10px; border: 1px solid rgba(250, 202, 43, 0.2)">
@@ -37,32 +36,7 @@ def show_announcements(st, announcements):
 
 
 def get_announcements_data():
-    return {
-        "Announcement 1": {
-            "title": "Announcement 1",
-            "content": "This is the first announcement",
-            "date": "2020-01-01",
-            "color": "yellow"
-        },
-        "Announcement 2": {
-            "title": "Announcement 2",
-            "content": "This is the Second announcement",
-            "date": "2020-02-01",
-            "color": "blue"
-        },
-        "Announcement 3": {
-            "title": "Announcement 3",
-            "content": "This is the Third announcement",
-            "date": "2020-03-01",
-            "color": "green"
-        },
-        "Announcement 4": {
-            "title": "Announcement 4",
-            "content": "This is the fourth announcement",
-            "date": "2020-04-01",
-            "color": "black"
-        },
-    }
+    return Utils.get_firebase_data("announcements")
 
 
 def show_page_heading(st):

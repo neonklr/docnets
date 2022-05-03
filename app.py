@@ -32,12 +32,13 @@ st.set_page_config(
     }
 )
 
+Utils.set_env_variables()
+
 if constants.FIREBASE_DATABASE == None:
     constants.FIREBASE_DATABASE = firestore.Client.from_service_account_info(
         Utils.get_credentials()
     )
 
-Utils.set_env_variables()
 Utils.remove_streamlit_marks(st)
 
 constants.COOKIE_MANAGER = CMFunctions.get_manager()
