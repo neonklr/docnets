@@ -2,6 +2,46 @@
 import hashlib
 from Scripts.constants import * 
 import Scripts.Utilities as Utils
+from Scripts.data_loader import get_appointment_data, get_doctors_data, get_users_data
+
+def cancel_booking(date_and_time, doc_id, patient_id):
+    # data = get_appointment_data().get(doc_id, None)
+
+    data = Utils.get_firebase_data(APPOINTMENT_FILE, doc_id)
+
+    if not data:
+        return None
+    
+    # with open(APPOINTMENT_FILE, 'r') as file:
+    #     data = json.load(file)
+    
+    schedule = data['schedule']
+    date = str(date_and_time.date())
+    time = str(date_and_time.time())
+
+    if date not in schedule:
+        print("date", data)
+        print("date", date)
+        raise Exception("No appointment on this date")
+
+    if time not in schedule[date]:
+        raise Exception("No appointment on this time")
+
+    if schedule[date][time] != patient_id:
+        raise Exception("You are not the patient")
+
+    del schedule[date][time]
+
+    if not schedule[date]:
+        del schedule[date]
+
+    # with open(APPOINTMENT_FILE, 'w') as file:
+    #     json.dump(data, file)
+
+    Utils.set_firebase_data(APPOINTMENT_FILE, doc_id, data)
+
+
+
 
 
 def add_booking(date_and_time, doc_id, patient_id):
@@ -35,7 +75,7 @@ def add_new_doctor(username, password, doc_data):
     # with open(CURR_FILE, 'r') as file:
     #     data = json.load(file)
 
-    data = Utils.get_firebase_data(DOCTORS_FILE, username)
+    data = get_doctors_data(username)
     
     if data:  # already exists
         raise Exception("Username already exists")
@@ -65,7 +105,7 @@ def add_new_user(username, password, user_data):
         # with open(CURR_FILE, 'r') as file:
     #     data = json.load(file)
 
-    data = Utils.get_firebase_data(USERS_FILE, username)
+    data = get_users_data(username)
     
     if data:  # already exists
         raise Exception("Username already exists")

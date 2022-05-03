@@ -128,8 +128,8 @@ def is_future_date(date_and_time):
     return datetime.now() <= date_and_time 
 
 
-def cancel_booking(date_and_time, doc_id, patient_id):
-    raise NotImplementedError 
+# def cancel_booking(date_and_time, doc_id, patient_id):
+#     raise NotImplementedError
 
 
 if __name__ == '__main__':
