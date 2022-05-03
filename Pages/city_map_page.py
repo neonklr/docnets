@@ -3,11 +3,15 @@ from Scripts.doctor import filter_docs
 from Scripts.constants import *
 import json
 
+from Scripts.data_loader import get_doctors_data
+
 def show_map(container, data):
     all_docs = filter_docs("specialization", data, reload=True)
 
-    with open(DOCTORS_FILE_PATH, 'r') as file:
-        doc_database = json.load(file)
+    # with open(DOCTORS_FILE_PATH, 'r') as file:
+    #     doc_database = json.load(file)
+
+    doc_database = get_doctors_data()
 
     locations, doc_names = [], []
 

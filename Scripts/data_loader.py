@@ -1,7 +1,7 @@
-import json 
-import datetime 
-
-from Scripts.constants import * 
+# import json
+import datetime
+import Scripts.Utilities as Utils
+from Scripts.constants import *
 
 
 class TimePreProcessor:
@@ -72,8 +72,10 @@ schedule_preprocessor = SchedulePreProcessor()
 
 
 def get_appointment_data(preprocess_time = True, preprocess_schedule = True):
-    with open(APPOINTMENT_FILE_PATH, 'r') as file:  # TODO: encoding = 'utf-8' or something  ?
-        data = json.load(file) 
+    # with open(APPOINTMENT_FILE_PATH, 'r') as file:  # TODO: encoding = 'utf-8' or something  ?
+    #     data = json.load(file)
+    
+    data = _get_appointment_data()
     
     if preprocess_time:
         time_preprocessor.preprocess_times(data) 
@@ -84,17 +86,39 @@ def get_appointment_data(preprocess_time = True, preprocess_schedule = True):
     return data 
 
 
-def get_doctors_data():
-    with open(DOCTORS_FILE_PATH, 'r') as file:
-        data = json.load(file) 
-    
-    return data 
 
-def get_users_data():
-    with open(USERS_FILE_PATH, 'r') as file:
-        data = json.load(file) 
+
+def _get_appointment_data(doctor = None):
+    if doctor is None:
+        return Utils.get_firebase_data(APPOINTMENT_FILE) 
+    else:
+        return Utils.get_firebase_data(APPOINTMENT_FILE, doctor) 
+
+
+
+def get_doctors_data(doctor=None):
+    if doctor == None:
+        return Utils.get_firebase_data(DOCTORS_FILE)
+    else:
+        return Utils.get_firebase_data(DOCTORS_FILE, doctor)
+
+    # with open(DOCTORS_FILE_PATH, 'r') as file:
+    #     data = json.load(file)
     
-    return data 
+    # return data
+
+
+def get_users_data(user = None):
+    if user is None:
+        return Utils.get_firebase_data(USERS_FILE)
+    else:
+        return Utils.get_firebase_data(USERS_FILE, user)
+    
+    # with open(USERS_FILE_PATH, 'r') as file:
+    #     data = json.load(file) 
+    
+    # return data
+
 
 if __name__ == '__main__':
     data = get_appointment_data() 

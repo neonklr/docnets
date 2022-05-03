@@ -1,3 +1,8 @@
+import os
+import Scripts.constants as constants
+import streamlit as st
+
+
 def remove_streamlit_marks(st):
     st.markdown(
         '''
@@ -141,3 +146,46 @@ def center_button(st, text):
     st.text("")
     columns = st.columns([3, 1, 3])
     return columns[1].button(text)
+
+
+
+def set_env_variables():
+    # Set environment variables
+    try:
+        all_variables = open(".env", 'r', encoding='utf-8').read().strip().split("\n")
+
+        for variable in all_variables:
+            var, val = variable.split("=>")
+            os.environ[var] = val
+    except:
+        pass
+
+
+
+from cryptography.fernet import Fernet
+import json
+
+def get_credentials():
+    credentials_encrypted = os.environ["FIREBASE_API"]
+    crypto_key = os.environ["CRYPTO_KEY"]
+
+    fernet = Fernet(crypto_key)
+    credentials = fernet.decrypt(credentials_encrypted.encode()).decode()
+
+    return json.loads(credentials)
+
+
+
+@st.experimental_memo(ttl=constants.DATABASE_CACHE_TTL, show_spinner=False)
+def get_firebase_data(outer, inner=None):
+    if inner != None:
+        doc_ref = constants.FIREBASE_DATABASE.collection(outer).document(inner)
+        return doc_ref.get().to_dict()
+    else:
+        doc_ref = constants.FIREBASE_DATABASE.collection(outer)
+        return {doc.id : doc.to_dict() for doc in doc_ref.stream()}
+
+
+def set_firebase_data(outer, inner, data):
+    doc_ref = constants.FIREBASE_DATABASE.collection(outer).document(inner)
+    doc_ref.set(data)

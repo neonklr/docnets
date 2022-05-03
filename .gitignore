@@ -4,3 +4,7 @@ temp.py
 Pages/__pycache__/*
 Scripts/__pycache__/*
 __requirements.txt
+Extra Scripts/*
+_Data/*
+.env
+Credentials/*

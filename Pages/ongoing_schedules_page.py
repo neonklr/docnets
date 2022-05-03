@@ -3,11 +3,12 @@ from Scripts.constants import *
 from annotated_text import annotated_text
 from Scripts.data_loader import get_appointment_data, get_doctors_data, get_users_data
 
-
-
 def add_info(container, title, content, label, is_doctor):
     # TODO :- Dark Theme Not Working
     # for colour palette reference :- https://material.io/archive/guidelines/style/color.html#color-color-palette
+
+    
+    Utils.add_space(container)
 
     if is_doctor:
         background = "#00E5FF"
@@ -22,10 +23,8 @@ def add_info(container, title, content, label, is_doctor):
         )
 
         annotated_text(
-                (content, "APPOINTMENT BOOKED", "white", "grey")
+                (content, "APPOINTMENT BOOKED", "inherit", "inherit")
         )
-    
-    Utils.add_space(container)
 
 def set_headings(container, title):
     if title == "Patients":
@@ -60,6 +59,7 @@ def show_ongoing_schedules_page(st):
 
     set_headings(patient_container, "Patients")
     set_headings(doctor_container, "Doctors")
+
 
     appointment_data = get_appointment_data()
     patient_data = get_users_data()

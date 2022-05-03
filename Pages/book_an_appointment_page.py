@@ -30,7 +30,8 @@ def show_doc_table(st, data):
         enable_enterprise_modules=True,
         height=350, 
         width='100%',
-        reload_data=True
+        reload_data=True,
+        key="doc_table"
     )
 
     # data = grid_response['data']
@@ -45,11 +46,23 @@ def show_booking_form(st):
         return None
 
     date_and_time = convert_to_datetime(
-        st.date_input("Select A Date of Appointment", value=datetime.now()),
-        st.time_input("Select A Time of Appointment", value=datetime.now() + timedelta(minutes=2))
+        st.date_input(
+            "Select A Date of Appointment",
+            value=st.session_state.get(
+                "appointment_date", datetime.now()
+            ),
+            key="appointment_date"
+        ),
+        st.time_input(
+            "Select A Time of Appointment",
+            value=st.session_state.get(
+                "appointment_time", datetime.now() + timedelta(minutes=2)
+            ),
+            key="appointment_time"
+        )
     )
 
-    specialization = st.selectbox("Select a specialization", ["Cardiology", "Neurology", "Orthopedics", "Gynaecology", "Dermatology"])
+    specialization = st.selectbox("Select a specialization", constants.ALL_SPECIALIZATIONS)
 
     info_box = st.empty()
 
@@ -69,6 +82,7 @@ def show_booking_form(st):
     for doc in doctors.values():
         del doc["password"]
 
+    
     if doctors:
         selected_doc = show_doc_table(st, doctors.values())
     else:
@@ -76,13 +90,6 @@ def show_booking_form(st):
         return None
 
     if selected_doc != None:
-        # TODO :- https://towardsdatascience.com/visualization-in-python-finding-routes-between-points-2d97d4881996
-        
-        # TODO :- Remove this eval
-        # Utils.add_folium_map(
-        #     None, 
-        #     [eval(selected_doc["location"])], [selected_doc["name"]],
-        # )
 
         Utils.add_folium_map_route(
             None,
@@ -140,7 +147,7 @@ def show_book_an_appointment_page(st):
 
     if constants.CURR_USER_IS_DOC:
         st.warning("The Booking Feature is only present for users and not doctors.")
-    elif constants.CURR_USER == None:
+    elif not constants.CURR_USER:
         st.warning("Please login to continue with this feature")
     else:
         show_booking_form(st)

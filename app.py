@@ -15,6 +15,9 @@ import Scripts.Utilities as Utils
 import Scripts.constants as constants
 import Scripts.cookie_manager as CMFunctions
 
+from google.cloud import firestore
+
+
 # ================================ SETTING STREAMLIT PAGE CONFIGURATIONS ================================ #
 
 st.set_page_config(
@@ -29,7 +32,12 @@ st.set_page_config(
     }
 )
 
+if constants.FIREBASE_DATABASE == None:
+    constants.FIREBASE_DATABASE = firestore.Client.from_service_account_info(
+        Utils.get_credentials()
+    )
 
+Utils.set_env_variables()
 Utils.remove_streamlit_marks(st)
 
 constants.COOKIE_MANAGER = CMFunctions.get_manager()
@@ -40,7 +48,7 @@ if constants.CURR_USER == None:
 
 # Additional Overwriting of "My Account" Tag
 
-if constants.CURR_USER == None:
+if not constants.CURR_USER:
     login_name = "Login/Signup"
 else:
     login_name = "My Account"
@@ -122,7 +130,7 @@ def main():
     elif curr_page == "FAQs":
         show_faqs_page(st)
 
-    elif curr_page == login_name:
+    elif curr_page == "Login/Signup" or curr_page == "My Account":
         show_my_account_page(st)
 
 main()
