@@ -81,7 +81,7 @@ def show_ongoing_schedules_page(st):
                     add_info(
                         doctor_container,
                         title=doctor_data[doctor_id]["name"],
-                        content="Doctor {} has been alloted an appointment with patient {} on {} at {}".format(doctor_data[doctor_id]["name"], patient_data[patient_id]["name"], schedule_date, schedule_time),
+                        content="{} has been alloted an appointment with patient {} on {} at {}".format(doctor_data[doctor_id]["name"], patient_data[patient_id]["name"], schedule_date, schedule_time),
                         label=f"@{doctor_id}",
                         is_doctor=True
                     )

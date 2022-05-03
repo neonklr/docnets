@@ -67,7 +67,7 @@ def show_register_form(st, register_form):
         data = {
             "name": register_form.text_input("Please enter your name"),
             "email": register_form.text_input("Please enter your email"),
-            "fees": register_form.number_input("Please enter your fees", value=100, step=100),
+            "fees": register_form.number_input("Please enter your fees", value=100, step=100, key="doc_fees"),
             "phone": register_form.text_input("Please enter your phone number", max_chars=10),
             "location": get_location_input(register_form),
             "slot_start": register_form.time_input(
@@ -80,7 +80,7 @@ def show_register_form(st, register_form):
                 value = st.session_state.get("slot_ending", None),
                 key="slot_ending"
             ),
-            "time_per_patient": register_form.number_input("Please enter time per patient you would like to give (in minutes)", value=30, step=1, max_value=24*60-1),
+            "time_per_patient": register_form.number_input("Please enter time per patient you would like to give (in minutes)", value=30, step=5, max_value=24*60-1),
             "specialization": register_form.selectbox("Please enter your specialization", constants.ALL_SPECIALIZATIONS),
             "experience": register_form.text_input("Please enter your experience (in years)", max_chars=5)
         }

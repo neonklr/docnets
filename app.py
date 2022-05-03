@@ -21,7 +21,7 @@ from google.cloud import firestore
 # ================================ SETTING STREAMLIT PAGE CONFIGURATIONS ================================ #
 
 st.set_page_config(
-    page_title="Docnets",
+    page_title="DocNets",
     layout="wide",
     page_icon=None, # DEPRECATED : constants.PAGE_ICON,
     initial_sidebar_state="collapsed",
