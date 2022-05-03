@@ -43,7 +43,7 @@ def set_headings(container, title):
     )
 
 
-def show_ongoing_schedules_page(st):
+def show_ongoing_schedules_page(st): 
     Utils.website_heading(
         st,
         content="Our Ongoing Schedules",
@@ -61,27 +61,51 @@ def show_ongoing_schedules_page(st):
     set_headings(doctor_container, "Doctors")
 
 
+    for appointment in get_sorted_appointments():
+        add_info(
+            patient_container, 
+            title = appointment.patient_name, 
+            content = "User {} has booked an appointment with doctor {} on {} at {}".format(
+                appointment.patient_name, appointment.doc_name, appointment.date, appointment.time
+            ),
+            label = f"@{appointment.patient_id}", 
+            is_doctor = False 
+        )
+
+        add_info(
+            doctor_container,
+            title=appointment.doc_name,
+            content="{} has been alloted an appointment with patient {} on {} at {}".format(
+                appointment.doc_name, appointment.patient_name, appointment.date, appointment.time),
+            label=f"@{appointment.doc_id}",
+            is_doctor=True
+        )
+
+
+class Appointment:
+    def __init__(self, date, time, patient_id, patient_name, doc_id, doc_name):
+        self.date, self.time = date, time  # date and time 
+        self.patient_id, self.patient_name = patient_id, patient_name  # patient data 
+        self.doc_id, self.doc_name = doc_id, doc_name  # doctor data     
+
+
+def get_sorted_appointments():
+    return sorted(
+        _get_all_appointments(), 
+        key = lambda appointment: (appointment.date, appointment.time) 
+    )
+
+def _get_all_appointments():
     appointment_data = get_appointment_data()
-    patient_data = get_users_data()
-    doctor_data = get_doctors_data()
+    patient_data = get_users_data()  # only used to get names
+    doctor_data = get_doctors_data() # only used to get names 
 
-    for doctor_id, value in appointment_data.items():
-        if value["schedule"]:
-            for schedule_date in value["schedule"].keys():
-                for schedule_time, patient_id in value["schedule"][schedule_date].items():
-
-                    add_info(
-                        patient_container,
-                        title=patient_data[patient_id]["name"],
-                        content="User {} has booked an appointment with doctor {} on {} at {}".format(patient_data[patient_id]["name"], doctor_data[doctor_id]["name"], schedule_date, schedule_time),
-                        label=f"@{patient_id}",
-                        is_doctor=False
-                    )
-
-                    add_info(
-                        doctor_container,
-                        title=doctor_data[doctor_id]["name"],
-                        content="{} has been alloted an appointment with patient {} on {} at {}".format(doctor_data[doctor_id]["name"], patient_data[patient_id]["name"], schedule_date, schedule_time),
-                        label=f"@{doctor_id}",
-                        is_doctor=True
-                    )
+    for doc_id, _data in appointment_data.items():
+        whole_schedule = _data['schedule']
+        for date, todays_schedule in whole_schedule.items():
+            for time, patient_id in todays_schedule.items():
+                yield Appointment(
+                    date, time, 
+                    patient_id, patient_data[patient_id]['name'], 
+                    doc_id, doctor_data[doc_id]['name']
+                )
