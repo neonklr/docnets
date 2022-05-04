@@ -3,7 +3,9 @@ import Scripts.constants as constants
 import Scripts.Utilities as Utils
 from datetime import datetime, timedelta
 
-from Scripts.doctor import get_docs_availiable_at, book
+from Scripts.doctor import get_docs_availiable_at, book, distance2
+
+from geopy.distance import geodesic
 
 from Scripts.data_loader import get_users_data
 
@@ -78,12 +80,21 @@ def show_booking_form(st):
     )
 
     doctors = {k: v for k, v in selected_docs}
+    user_location = get_users_data()[constants.CURR_USER]["location"]
 
-    for doc in doctors.values():
-        del doc["password"]
+    for doc in doctors.keys():
+        del doctors[doc]["password"]
+
+        doctors[doc]["distance (in KM)"] = round(
+            geodesic(
+                user_location,
+                doctors[doc]["location"]
+            ).km, 3
+        )
 
     
     if doctors:
+        # add here
         selected_doc = show_doc_table(st, doctors.values())
     else:
         info_box.warning("No doctor available at the moment")
@@ -95,9 +106,9 @@ def show_booking_form(st):
             None,
             location_1 = eval(selected_doc["location"]),
             doc_1 = selected_doc["name"],
-            location_2 = get_users_data()[constants.CURR_USER]["location"],
-            doc_2 = constants.CURR_USER,
-            label=None
+            location_2 = user_location,
+            doc_2 = "You",
+            label=f"Your route {selected_doc['distance (in KM)']} KM"
         )
 
         # selected_doc_id = None

@@ -69,10 +69,10 @@ def __add_folium_map_route(location_1, location_2, doc_1, doc_2, label, width, z
         tooltip=doc_2,
     ).add_to(m)
 
-    f1=folium.FeatureGroup("Your Route")
+    f1=folium.FeatureGroup(label)
 
     # Adding lines to the different feature groups
-    line_1=folium.vector_layers.PolyLine((location_1, location_2),popup='<b>Your Route</b>',tooltip='Your Route',color='red',weight=10).add_to(f1)
+    line_1=folium.vector_layers.PolyLine((location_1, location_2),popup=f'<b>{label}</b>',tooltip=label,color='red',weight=10).add_to(f1)
 
     f1.add_to(m)
 

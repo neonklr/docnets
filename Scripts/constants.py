@@ -8,7 +8,8 @@ DATABASE_CACHE_TTL = 1
 
 
 CURR_USER = None
-CURR_USER_IS_DOC = None 
+CURR_USER_IS_DOC = None
+
 
 COOKIE_ID = "User/DocNets/Username-Cache"
 # COOKIE_MANAGER = None

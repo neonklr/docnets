@@ -34,7 +34,7 @@ def second_header_util(container, icon, heading, content):
 def second_header(st):
     Utils.website_heading(
         st,
-        content="An easy-to-use appointment scheduling app for doctors",
+        content="DocNets, An easy-to-use appointment scheduling app for doctors",
         symbol=".",
         font_size=60,
         color="green",
