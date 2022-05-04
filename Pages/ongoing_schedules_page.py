@@ -82,7 +82,7 @@ def show_ongoing_schedules_page(st):
         add_info(
             patient_container, 
             title = appointment.patient_name, 
-            content = "User {} has booked an appointment with doctor {} on {} at {}".format(
+            content = "User {} has booked an appointment with {} on {} at {}".format(
                 appointment.patient_name, appointment.doc_name, appointment.date, appointment.time
             ),
             label = f"@{appointment.patient_id}", 
