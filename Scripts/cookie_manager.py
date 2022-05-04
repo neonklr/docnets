@@ -5,7 +5,7 @@ import Scripts.constants as constants
 
 @st.experimental_singleton(suppress_st_warning=True)
 def get_manager():
-    return stx.CookieManager(key="oof_cookie_manager")
+    return stx.CookieManager()
 
 
 def get_user_cookies():

@@ -67,7 +67,7 @@ def show_register_form(st, register_form):
         data = {
             "name": register_form.text_input("Please enter your name"),
             "email": register_form.text_input("Please enter your email"),
-            "fees": register_form.number_input("Please enter your fees", value=100, step=100, key="doc_fees"),
+            "fees": register_form.number_input("Please enter your fees", value=100, step=100, key="doc_fees", min_value=0),
             "phone": register_form.text_input("Please enter your phone number", max_chars=10),
             "location": get_location_input(register_form),
             "slot_start": register_form.time_input(
@@ -147,7 +147,6 @@ def show_register_form(st, register_form):
                     )
 
                 except Exception as e:
-                    raise e
                     info_box.warning(str(e))
 
 
