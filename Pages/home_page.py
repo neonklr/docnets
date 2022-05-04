@@ -4,13 +4,17 @@ from Scripts.data_loader import get_doctors_data, get_users_data
 def top_header(st):
     left, right = st.empty().columns(2)
 
+    Utils.add_space(left)
+    Utils.add_space(left)
+
     # first header
     Utils.website_heading(
         left,
         content="Doctor is a designation where passion and profession co-exist",
         symbol=".",
-        font_size=55,
-        color="blue"
+        font_size=50,
+        color="blue",
+        text_align="center"
     )
     
     right.image("https://soffront.com/wp-content/uploads/2020/11/healthcare1.png", use_column_width=True)
@@ -36,7 +40,7 @@ def second_header(st):
         st,
         content="DocNets, An easy-to-use appointment scheduling app for a patient with a doctor",
         symbol=".",
-        font_size=60,
+        font_size=50,
         color="green",
         text_align="center"
     )
@@ -68,7 +72,7 @@ def third_header(st):
         st,
         content="Supporting connection between Doctors and Patients from all over the world",
         symbol=".",
-        font_size=60,
+        font_size=50,
         color="red",
         text_align="center"
     )
