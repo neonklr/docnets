@@ -9,7 +9,7 @@ import Scripts.constants as constants
 
 
 def get_user_cookies():
-    COOKIES = constants.COOKIES[constants.COOKIE_ID]
+    COOKIES = constants.COOKIES.get(constants.COOKIE_ID, None)
     # print("COOKIES", COOKIES)
 
     if COOKIES != None:
