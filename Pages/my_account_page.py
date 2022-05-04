@@ -129,6 +129,8 @@ def show_register_form(st, register_form):
                         [username, True]
                     )
 
+                    st.experimental_rerun()
+
                 except Exception as e:
                     info_box.warning(str(e))
 
@@ -146,6 +148,8 @@ def show_register_form(st, register_form):
                     set_user_cookies(
                         [username, False]
                     )
+
+                    st.experimental_rerun()
 
                 except Exception as e:
                     info_box.warning(str(e))
