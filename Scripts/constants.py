@@ -10,9 +10,10 @@ DATABASE_CACHE_TTL = 1
 CURR_USER = None
 CURR_USER_IS_DOC = None 
 
-COOKIE_ID = "User/AppointmentBooking/User-Site-Cache"
-COOKIE_MANAGER = None
+COOKIE_ID = "User/DocNets/Username-Cache"
+# COOKIE_MANAGER = None
 EXPIRES_IN_DAYS = 45
+COOKIES = None
 
 ALL_SPECIALIZATIONS = [
     "General Medicine",

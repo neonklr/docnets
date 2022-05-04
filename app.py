@@ -17,6 +17,9 @@ import Scripts.cookie_manager as CMFunctions
 
 from google.cloud import firestore
 
+from streamlit_cookies_manager import EncryptedCookieManager
+import os
+
 
 # ================================ SETTING STREAMLIT PAGE CONFIGURATIONS ================================ #
 
@@ -34,17 +37,30 @@ st.set_page_config(
 
 Utils.set_env_variables()
 
+
+#  This should be on top of your script
+constants.COOKIES = EncryptedCookieManager(
+    # This prefix will get added to all your cookie names.
+    # This way you can run your app on Streamlit Cloud without cookie name clashes with other apps.
+    prefix="docnets/cookies-manager/user-data/",
+    # You should really setup a long COOKIES_PASSWORD secret if you're running on Streamlit Cloud.
+    password=os.environ.get("COOKIES_PASSWORD", "My secret password"),
+)
+
+if not constants.COOKIES.ready():
+    # Wait for the component to load and send us current cookies.
+    st.stop()
+
+CMFunctions.get_user_cookies()
+# st.write(constants.COOKIES)
+
+
 if constants.FIREBASE_DATABASE == None:
     constants.FIREBASE_DATABASE = firestore.Client.from_service_account_info(
         Utils.get_credentials()
     )
 
 Utils.remove_streamlit_marks(st)
-
-constants.COOKIE_MANAGER = CMFunctions.get_manager()
-
-if constants.CURR_USER == None:
-    CMFunctions.get_user_cookies()
 
 
 # Additional Overwriting of "My Account" Tag

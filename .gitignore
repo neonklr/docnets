@@ -8,3 +8,4 @@ Extra Scripts/*
 _Data/*
 .env
 Credentials/*
+_app.py

@@ -49,6 +49,7 @@ def show_login_form(st, login_form):
         try:
             login(username, password, i_am_a == "I am a doctor")
             info_box.success("Successfully logged in")
+            st.experimental_rerun()
         except Exception as e:
             info_box.warning(str(e))
 
@@ -162,6 +163,7 @@ def show_my_account_page(st):
         st.warning(f"You are logged In as {constants.CURR_USER} @{'DOCTOR' if constants.CURR_USER_IS_DOC else 'USER'}")
         if Utils.center_button(st, "Logout"):
             logout()
+            st.experimental_rerun()
 
         return None
 
