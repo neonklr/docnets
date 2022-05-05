@@ -12,7 +12,7 @@ CURR_USER_IS_DOC = None
 
 
 COOKIE_ID = "User/DocNets/Username-Cache"
-# COOKIE_MANAGER = None
+COOKIE_MANAGER = None
 EXPIRES_IN_DAYS = 45
 COOKIES = None
 
