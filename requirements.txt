@@ -1,6 +1,6 @@
 extra_streamlit_components==0.1.53
 st_annotated_text==3.0.0
-streamlit==1.7.0
+streamlit==1.8.1
 cryptography==36.0.1
 streamlit-lottie==0.0.3
 pandas
